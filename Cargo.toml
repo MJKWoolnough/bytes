@@ -1,0 +1,6 @@
+[package]
+name = "bytes"
+version = "0.1.0"
+authors = ["Michael Woolnough <michael.woolnough@gmail.com>"]
+
+[dependencies]
