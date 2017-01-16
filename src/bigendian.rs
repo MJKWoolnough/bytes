@@ -45,7 +45,7 @@ impl<T: io::Read> EndianRead for Read<T> {
     }
 }
 
-impl<T: io::Read> ops::Deref for Write<T> {
+impl<T: io::Read> ops::Deref for Read<T> {
     type Target = T;
 
     fn deref(&self) -> &T {
