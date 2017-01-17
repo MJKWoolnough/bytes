@@ -7,6 +7,12 @@ pub struct Read<T: io::Read> {
     reader: T,
 }
 
+impl<T: io::Read> Read<T> {
+    pub fn new(data: T) -> Read<T> {
+        Read { reader: data }
+    }
+}
+
 impl<T: io::Read> io::Read for Read<T> {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
         self.reader.read(buf)
@@ -55,6 +61,12 @@ impl<T: io::Read> ops::Deref for Read<T> {
 
 pub struct Write<T: io::Write> {
     writer: T,
+}
+
+impl<T: io::Write> Write<T> {
+    pub fn new(data: T) -> Write<T> {
+        Write { writer: data }
+    }
 }
 
 impl<T: io::Write> io::Write for Write<T> {
