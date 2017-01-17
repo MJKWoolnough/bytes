@@ -5,6 +5,12 @@ pub struct Buffer {
     data: Vec<u8>,
 }
 
+impl Buffer {
+    pub fn new(data: Vec<u8>) -> Buffer {
+        Buffer { data: data }
+    }
+}
+
 impl io::Read for Buffer {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
         let l = self.data.len();
@@ -45,7 +51,7 @@ mod tests {
 
     #[test]
     fn buffer_read_test() {
-        let mut buffer = super::Buffer { data: String::from("Hello, World!").into_bytes() };
+        let mut buffer = super::Buffer::new(String::from("Hello, World!").into_bytes());
         let mut buf = [0; 5];
 
         assert_eq!(buffer.data, String::from("Hello, World!").into_bytes());
@@ -71,7 +77,7 @@ mod tests {
 
     #[test]
     fn buffer_write_test() {
-        let mut buffer = super::Buffer { data: Vec::new() };
+        let mut buffer = super::Buffer::new(Vec::new());
         assert_eq!(buffer.write(String::from("J").as_bytes()).expect("unexpected error"),
                    1);
         assert_eq!(buffer.data, String::from("J").into_bytes());
@@ -88,7 +94,7 @@ mod tests {
 
     #[test]
     fn buffer_read_write_test() {
-        let mut buffer = super::Buffer { data: String::from("Beeping").into_bytes() };
+        let mut buffer = super::Buffer::new(String::from("Beeping").into_bytes());
         let mut buf = [0; 5];
 
         assert_eq!(buffer.read(&mut buf).expect("unexpected error"), 5);
