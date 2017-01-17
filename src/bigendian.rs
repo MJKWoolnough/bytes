@@ -108,3 +108,35 @@ impl<T: io::Write> ops::Deref for Write<T> {
         &self.writer
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::super::buffer::Buffer;
+    use super::super::EndianRead;
+    use super::super::EndianWrite;
+
+    #[test]
+    fn read() {
+        let mut buffer = super::Read {
+            reader: Buffer::new(vec![10, 11, 12, 13, 12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 65]),
+        };
+
+        assert_eq!(buffer.read_u32().expect("unexpected error"), 168496141);
+        assert_eq!(buffer.read_u16().expect("unexpected error"), 3085);
+        assert_eq!(buffer.read_u64().expect("unexpected error"),
+                   72623859790382856);
+        assert_eq!(buffer.read_u8().expect("unexpected error"), 65);
+    }
+    #[test]
+    fn write() {
+        let mut buffer = super::Write::new(Buffer::new(Vec::new()));
+
+        buffer.write_u32(168496141).expect("unexpected error");
+        buffer.write_u16(3085).expect("unexpected error");
+        buffer.write_u64(72623859790382856).expect("unexpected error");
+        buffer.write_u8(65).expect("unexpected error");
+        assert_eq!(**buffer,
+                   vec![10, 11, 12, 13, 12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 65]);
+    }
+
+}
