@@ -3,7 +3,7 @@ use std::ops;
 use EndianRead;
 use EndianWrite;
 
-struct Read<T: io::Read> {
+pub struct Read<T: io::Read> {
     reader: T,
 }
 
@@ -54,7 +54,7 @@ impl<T: io::Read> ops::Deref for Read<T> {
 }
 
 
-struct Write<T: io::Write> {
+pub struct Write<T: io::Write> {
     writer: T,
 }
 

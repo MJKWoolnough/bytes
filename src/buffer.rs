@@ -1,7 +1,7 @@
 use std::io;
 use std::ops;
 
-struct Buffer {
+pub struct Buffer {
     data: Vec<u8>,
 }
 

@@ -1,10 +1,9 @@
 use std::io;
 use std::mem;
 
-
-mod littleendian;
-mod bigendian;
-mod buffer;
+pub mod littleendian;
+pub mod bigendian;
+pub mod buffer;
 
 pub trait EndianRead: io::Read {
     fn read_u8(&mut self) -> io::Result<u8> {
@@ -81,10 +80,4 @@ pub trait EndianWrite: io::Write {
     fn write_f64(&mut self, v: f64) -> io::Result<()> {
         self.write_u64(unsafe { mem::transmute(v) })
     }
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {}
 }
