@@ -50,7 +50,7 @@ mod tests {
     use std::vec::Vec;
 
     #[test]
-    fn buffer_read_test() {
+    fn read_test() {
         let mut buffer = super::Buffer::new(String::from("Hello, World!").into_bytes());
         let mut buf = [0; 5];
 
@@ -76,7 +76,7 @@ mod tests {
     }
 
     #[test]
-    fn buffer_write_test() {
+    fn write_test() {
         let mut buffer = super::Buffer::new(Vec::new());
         assert_eq!(buffer.write(String::from("J").as_bytes()).expect("unexpected error"),
                    1);
@@ -93,7 +93,7 @@ mod tests {
     }
 
     #[test]
-    fn buffer_read_write_test() {
+    fn read_write_test() {
         let mut buffer = super::Buffer::new(String::from("Beeping").into_bytes());
         let mut buf = [0; 5];
 
