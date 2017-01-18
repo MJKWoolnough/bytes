@@ -1,6 +1,7 @@
 use std::io;
 use std::ops;
 
+/// The Buffer struct wraps a Vec<u8> to provide read and write
 pub struct Buffer {
     data: Vec<u8>,
 }
@@ -12,6 +13,7 @@ impl Buffer {
 }
 
 impl io::Read for Buffer {
+    /// The read function moves bytes from the internal Vec<u8> to the given slice.
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
         let l = self.data.len();
         let m = buf.len();
@@ -25,11 +27,13 @@ impl io::Read for Buffer {
 
 
 impl io::Write for Buffer {
+    /// The write function appends the given byte slice to the internal Vec<u8>.
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         self.data.reserve(buf.len());
         self.data.extend_from_slice(buf);
         Ok(buf.len())
     }
+    /// The flush function is essential a no-op, always returning Ok(()).
     fn flush(&mut self) -> io::Result<()> {
         Ok(())
     }
@@ -38,6 +42,7 @@ impl io::Write for Buffer {
 impl ops::Deref for Buffer {
     type Target = Vec<u8>;
 
+    /// The deref function allows access to the wrapped Vec<u8>.
     fn deref(&self) -> &Vec<u8> {
         &self.data
     }
