@@ -59,22 +59,22 @@ mod tests {
         let mut buffer = super::Buffer::new(String::from("Hello, World!").into_bytes());
         let mut buf = [0; 5];
 
-        assert_eq!(buffer.data, String::from("Hello, World!").into_bytes());
+        assert_eq!(*buffer, String::from("Hello, World!").into_bytes());
 
         assert_eq!(buffer.read(&mut buf).expect("unexpected error"), 5);
         assert_eq!(buf, String::from("Hello").as_bytes());
 
-        assert_eq!(buffer.data, String::from(", World!").into_bytes());
+        assert_eq!(*buffer, String::from(", World!").into_bytes());
 
         assert_eq!(buffer.read(&mut buf).expect("unexpected error"), 5);
         assert_eq!(buf, String::from(", Wor").as_bytes());
 
-        assert_eq!(buffer.data, String::from("ld!").into_bytes());
+        assert_eq!(*buffer, String::from("ld!").into_bytes());
 
         assert_eq!(buffer.read(&mut buf).expect("unexpected error"), 3);
         assert_eq!(buf, String::from("ld!or").as_bytes());
 
-        assert_eq!(buffer.data, String::from("").into_bytes());
+        assert_eq!(*buffer, String::from("").into_bytes());
 
         assert_eq!(buffer.read(&mut buf).expect("unexpected error"), 0);
         assert_eq!(buf, String::from("ld!or").as_bytes());
@@ -85,16 +85,16 @@ mod tests {
         let mut buffer = super::Buffer::new(Vec::new());
         assert_eq!(buffer.write(String::from("J").as_bytes()).expect("unexpected error"),
                    1);
-        assert_eq!(buffer.data, String::from("J").into_bytes());
+        assert_eq!(*buffer, String::from("J").into_bytes());
         assert_eq!(buffer.write(String::from("ohn").as_bytes()).expect("unexpected error"),
                    3);
-        assert_eq!(buffer.data, String::from("John").into_bytes());
+        assert_eq!(*buffer, String::from("John").into_bytes());
         assert_eq!(buffer.write(String::from("ny").as_bytes()).expect("unexpected error"),
                    2);
-        assert_eq!(buffer.data, String::from("Johnny").into_bytes());
+        assert_eq!(*buffer, String::from("Johnny").into_bytes());
         assert_eq!(buffer.write(String::from("").as_bytes()).expect("unexpected error"),
                    0);
-        assert_eq!(buffer.data, String::from("Johnny").into_bytes());
+        assert_eq!(*buffer, String::from("Johnny").into_bytes());
     }
 
     #[test]
@@ -107,14 +107,14 @@ mod tests {
 
         assert_eq!(buffer.write(String::from(" Hell").as_bytes()).expect("unexpected error"),
                    5);
-        assert_eq!(buffer.data, String::from("ng Hell").into_bytes());
+        assert_eq!(*buffer, String::from("ng Hell").into_bytes());
 
         assert_eq!(buffer.read(&mut buf).expect("unexpected error"), 5);
         assert_eq!(buf, String::from("ng He").as_bytes());
 
         assert_eq!(buffer.write(String::from("!").as_bytes()).expect("unexpected error"),
                    1);
-        assert_eq!(buffer.data, String::from("ll!").into_bytes());
+        assert_eq!(*buffer, String::from("ll!").into_bytes());
 
         assert_eq!(buffer.read(&mut buf).expect("unexpected error"), 3);
         assert_eq!(buf, String::from("ll!He").as_bytes());
