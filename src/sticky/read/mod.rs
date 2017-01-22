@@ -23,3 +23,24 @@ impl io::Read for Sticky {
         }
     }
 }
+
+impl<T: io::Read> ops::Deref for Sticky<T> {
+    type Target = T;
+
+    /// The deref function allows access to the wrapped io::Read.
+    fn deref(&self) -> &T {
+        &self.reader
+    }
+}
+
+impl<T: io::Read> Sticky<T> {
+    fn error(&mut self) -> Option<Error> {
+        self.error
+    }
+    fn has_error(&mut self) -> bool {
+        self.error.is_some()
+    }
+    fn count(&mut self) -> u64 {
+        self.count
+    }
+}
