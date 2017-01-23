@@ -30,7 +30,7 @@ impl io::Write for Sticky {
 impl<T: io::Read> ops::Deref for Sticky<T> {
     type Target = T;
 
-    /// The deref function allows access to the wrapped io::Read.
+    /// The deref function allows access to the wrapped io::Write.
     fn deref(&self) -> &T {
         &self.reader
     }
