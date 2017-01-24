@@ -1,13 +1,16 @@
+use std::io;
+use std::ops;
+
 pub struct Sticky<T: io::Write> {
     writer: T,
-    count: u64,
-    error: Option<Error>,
+    count: usize,
+    error: Option<io::Error>,
 }
 
-impl io::Write for Sticky {
-    fn write(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+impl<T: io::Write> io::Write for Sticky<T> {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         match self.error {
-            Some(e) => return e,
+            Some(_) => Ok(buf.len()),
             None => {
                 match self.writer.write(buf) {
                     Ok(c) => {
@@ -15,8 +18,8 @@ impl io::Write for Sticky {
                         Ok(c)
                     }
                     Err(e) => {
-                        self.error = Self(e);
-                        Err(e)
+                        self.error = Some(e);
+                        Ok(buf.len())
                     }
                 }
             }
@@ -27,23 +30,23 @@ impl io::Write for Sticky {
     }
 }
 
-impl<T: io::Read> ops::Deref for Sticky<T> {
+impl<T: io::Write> ops::Deref for Sticky<T> {
     type Target = T;
 
     /// The deref function allows access to the wrapped io::Write.
     fn deref(&self) -> &T {
-        &self.reader
+        &self.writer
     }
 }
 
-impl<T: io::Read> Sticky<T> {
-    fn error(&mut self) -> Option<Error> {
-        self.error
+impl<T: io::Write> Sticky<T> {
+    fn error(&mut self) -> &Option<io::Error> {
+        &self.error
     }
     fn has_error(&mut self) -> bool {
         self.error.is_some()
     }
-    fn count(&mut self) -> u64 {
+    fn count(&mut self) -> usize {
         self.count
     }
 }

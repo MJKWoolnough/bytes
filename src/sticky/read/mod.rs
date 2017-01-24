@@ -1,13 +1,17 @@
+use std::io;
+use std::ops;
+use std::error::Error;
+
 pub struct Sticky<T: io::Read> {
     reader: T,
-    count: u64,
-    error: Option<Error>,
+    count: usize,
+    error: Option<io::Error>,
 }
 
-impl io::Read for Sticky {
+impl<T: io::Read> io::Read for Sticky<T> {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
         match self.error {
-            Some(e) => return e,
+            Some(_) => Ok(buf.len()),
             None => {
                 match self.reader.read(buf) {
                     Ok(c) => {
@@ -15,8 +19,8 @@ impl io::Read for Sticky {
                         Ok(c)
                     }
                     Err(e) => {
-                        self.error = Self(e);
-                        Err(e)
+                        self.error = Some(e);
+                        Ok(buf.len())
                     }
                 }
             }
@@ -34,13 +38,13 @@ impl<T: io::Read> ops::Deref for Sticky<T> {
 }
 
 impl<T: io::Read> Sticky<T> {
-    fn error(&mut self) -> Option<Error> {
-        self.error
+    fn error(&mut self) -> &Option<io::Error> {
+        &self.error
     }
     fn has_error(&mut self) -> bool {
         self.error.is_some()
     }
-    fn count(&mut self) -> u64 {
+    fn count(&mut self) -> usize {
         self.count
     }
 }
