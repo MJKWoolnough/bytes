@@ -6,7 +6,7 @@ pub struct Sticky<T: io::Read> {
 
 impl io::Read for Sticky {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        match self.error.is_some() {
+        match self.error {
             Some(e) => return e,
             None => {
                 match self.reader.read(buf) {

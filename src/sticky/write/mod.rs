@@ -6,7 +6,7 @@ pub struct Sticky<T: io::Write> {
 
 impl io::Write for Sticky {
     fn write(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        match self.error.is_some() {
+        match self.error {
             Some(e) => return e,
             None => {
                 match self.writer.write(buf) {
