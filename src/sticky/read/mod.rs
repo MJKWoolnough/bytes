@@ -1,6 +1,5 @@
 use std::io;
 use std::ops;
-use std::error::Error;
 
 pub struct Sticky<T: io::Read> {
     reader: T,
@@ -38,13 +37,19 @@ impl<T: io::Read> ops::Deref for Sticky<T> {
 }
 
 impl<T: io::Read> Sticky<T> {
-    fn error(&mut self) -> &Option<io::Error> {
-        &self.error
+    fn error(self) -> Option<io::Error> {
+        self.error
     }
-    fn has_error(&mut self) -> bool {
+    fn has_error(self) -> bool {
         self.error.is_some()
     }
-    fn count(&mut self) -> usize {
+    fn count(self) -> usize {
         self.count
+    }
+    fn result(self) -> io::Result<usize> {
+        match self.error {
+            Some(e) => Err(e),
+            None => Ok(self.count),
+        }
     }
 }
