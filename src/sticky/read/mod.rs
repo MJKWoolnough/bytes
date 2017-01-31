@@ -37,19 +37,33 @@ impl<T: io::Read> ops::Deref for Sticky<T> {
 }
 
 impl<T: io::Read> Sticky<T> {
-    fn error(self) -> Option<io::Error> {
+    pub fn new(reader: T) -> Sticky<T> {
+        Sticky {
+            reader: reader,
+            count: 0,
+            error: None,
+        }
+    }
+    pub fn error(self) -> Option<io::Error> {
         self.error
     }
-    fn has_error(self) -> bool {
+    pub fn has_error(self) -> bool {
         self.error.is_some()
     }
-    fn count(self) -> usize {
+    pub fn count(self) -> usize {
         self.count
     }
-    fn result(self) -> io::Result<usize> {
+    pub fn result(self) -> io::Result<usize> {
         match self.error {
             Some(e) => Err(e),
             None => Ok(self.count),
         }
     }
+}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn sticky_read_test() {}
 }
