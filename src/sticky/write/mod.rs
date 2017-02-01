@@ -50,7 +50,7 @@ impl<T: io::Write> Sticky<T> {
     pub fn error(self) -> Option<io::Error> {
         self.error
     }
-    pub fn has_error(self) -> bool {
+    pub fn has_error(&self) -> bool {
         self.error.is_some()
     }
     pub fn count(self) -> usize {
