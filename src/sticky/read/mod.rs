@@ -50,7 +50,7 @@ impl<T: io::Read> Sticky<T> {
     pub fn has_error(&self) -> bool {
         self.error.is_some()
     }
-    pub fn count(self) -> usize {
+    pub fn count(&self) -> usize {
         self.count
     }
     pub fn result(self) -> io::Result<usize> {
